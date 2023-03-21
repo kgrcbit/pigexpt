@@ -1,0 +1,10 @@
+ -- max_temp.pig: Finds the maximum temperature by year
+records_21 = LOAD '/home/hduser012/Desktop/pig-expt/pig2/sample.txt' AS (year:chararray, temperature:int, quality:int);
+
+filtered_records_21 = FILTER records_21 BY temperature != 9999 AND (quality == 0 OR quality == 1 OR quality == 4 OR quality == 5 OR quality == 9);
+
+grouped_records_21 = GROUP filtered_records_21 BY year;
+
+max_temp_21 = FOREACH grouped_records_21 GENERATE group, MAX(filtered_records_21.temperature);
+
+DUMP max_temp_21; 
