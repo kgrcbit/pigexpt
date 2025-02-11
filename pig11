@@ -1,0 +1,45 @@
+
+
+input4 = LOAD '/it1b2lab/p1'  AS (line:chararray);
+(hi how are you)
+(how is your bro)
+(hi how are you)
+
+ words = FOREACH input4 GENERATE FLATTEN(TOKENIZE(line))
+  AS word;
+  {(hi),(how),(are),(you)}
+  {(1,2),(5,6)}
+  (1,2,5,6)
+(hi)
+(how)
+(are)
+(you)
+(how)
+(is)
+(your)
+(bro)
+(hi)
+(how)
+(are)
+(you)
+
+  
+grpd = GROUP words BY word;
+(hi,{(hi),(hi)})
+(is,{(is)})
+(are,{(are),(are)})
+(bro,{(bro)})
+(how,{(how),(how),(how)})
+(you,{(you),(you)})
+(your,{(your)})
+
+cntd = FOREACH grpd GENERATE group AS word, COUNT(words) AS count;
+DUMP cntd;
+(hi,2)
+(is,1)
+(are,2)
+(bro,1)
+(how,3)
+(you,2)
+(your,1)
+
