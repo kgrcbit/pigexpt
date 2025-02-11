@@ -1,0 +1,11 @@
+A = load './kids.txt' AS (line:chararray);
+A = foreach A generate flatten(STRSPLIT(line,' '));
+B = load './purchases.txt' AS (line:chararray);
+B = foreach B generate flatten(STRSPLIT(line,' '));
+A = filter A by ($1==10) or ($1==11) or ($1==12);
+C = join A by $0, B by $0;
+C = group C by $3;
+D = foreach C generate group, COUNT(C);
+D = order D by $1 desc;
+D = limit D 1;
+store D into './popularFlavor/';
